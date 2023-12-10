@@ -3,9 +3,9 @@
 <package format="3">
   <name>collection_robot</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>ENPM808X Final Project</description>
   <maintainer email="muditsingal@gmail.com">humble-dev</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -20,6 +20,10 @@
   <depend>cv_bridge</depend>
   <depend>rclcpp</depend>
   <depend>rclpy</depend>
+
+  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
