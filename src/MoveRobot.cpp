@@ -1,5 +1,5 @@
 /**
- * @file explorer.cpp
+ * @file MoveRobot.cpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief C++ file for exploring the workspace to detect blocks
  * @version 0.1
@@ -9,8 +9,8 @@
  *
  */
 
-#include "explorer.hpp"
+#include "MoveRobot.hpp"
 
-explorer::explorer() : Node("explorer") {
+MoveRobot::MoveRobot() : Node("MoveRobot") {
 
 }

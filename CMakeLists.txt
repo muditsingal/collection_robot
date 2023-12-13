@@ -19,13 +19,12 @@ find_package(cv_bridge REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 
-add_executable(detector_node src/detector_node.cpp)
-target_include_directories(detector_node PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_compile_features(detector_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+# add_executable(detector_node src/detector_node.cpp)
+# target_include_directories(detector_node PUBLIC
+#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#   $<INSTALL_INTERFACE:include>)
+# target_compile_features(detector_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 ament_target_dependencies(
-  detector_node
   "std_msgs"
   "sensor_msgs"
   "geometry_msgs"
@@ -39,8 +38,8 @@ ament_target_dependencies(
   "rclpy"
 )
 
-install(TARGETS detector_node
-  DESTINATION lib/${PROJECT_NAME})
+# install(TARGETS detector_node
+#   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
   launch
