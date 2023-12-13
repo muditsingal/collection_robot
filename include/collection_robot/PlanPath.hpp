@@ -25,11 +25,17 @@
 #include <rclcpp/rclcpp.hpp>
 
 using namespace std::chrono_literals;
+using POSEA_PUB = rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr;
 
 class PlanPath : public rclcpp::Node {
   public:
     PlanPath();
 
   private:
+    void moveTargetCallback();
+    geometry_msgs::msg::PoseArray planPath();
+    geometry_msgs::msg::Pose current_pose_, next_pose_;
+    rclcpp::TimerBase timer_;
+    POSEA_PUB move_target;
 
 };
