@@ -1,7 +1,8 @@
 # collection_robot
 ENPM808X final project repo
 
-[![codecov](badge_link)](https://codecov.io/github/muditsingal/collection_robot)
+[![codecov](https://codecov.io/gh/muditsingal/collection_robot/branch/dev/graph/badge.svg)](https://codecov.io/gh/muditsingal/collection_robot)
+
 
 ### Sprint planning Sheet
 
