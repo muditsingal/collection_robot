@@ -1,5 +1,5 @@
 /**
- * @file PlanPath.hpp
+ * @file plan_path.hpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief header file for planning paths to blocks and executing them
  * @version 0.1

@@ -1,5 +1,5 @@
 /**
- * @file PlanPath.cpp
+ * @file plan_path.cpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief C++ file for planning paths to blocks and executing them
  * @version 0.1
@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "PlanPath.hpp"
+#include "plan_path.hpp"
 
-PlanPath::PlanPath() : Node("PlanPath") {
+PlanPath::PlanPath() : Node("plan_path") {
 
 }
