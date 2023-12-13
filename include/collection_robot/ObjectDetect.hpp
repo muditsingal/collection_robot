@@ -28,12 +28,24 @@
 #include <apriltag.h>
 
 using namespace std::chrono_literals;
+using POSE_PUB = rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr;
+using IMG_SUB = rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr;
+
 
 class ObjectDetect : public rclcpp::Node {
   public:
     ObjectDetect();
 
-
   private:
+    void timerCallback();
+
+    void framesCallback();
+
+    geometry_msgs::msg::Pose detectNearestObject();
+
+    POSE_PUB nearest_object_pose;
+    IMG_SUB read_frames_;
+    sensor_msgs::msg::Image frames_;
+    rclcpp::TimerBase timer_;
 
 };
