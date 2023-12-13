@@ -13,3 +13,100 @@
 #include <rclcpp/rclcpp.hpp>
 #include <gtest/gtest.h>
 #include <stdlib.h>
+
+#include <std_msgs/msg/string.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+#include <geometry_msgs/msg/pose.hpp>
+#include <geometry_msgs/msg/pose_array.hpp>
+
+class TaskPlanningFixture : public testing::Test {
+ public:
+  TaskPlanningFixture()
+      : node_{std::make_shared<rclcpp::Node>("collection_robot_test")} {
+    RCLCPP_INFO_STREAM(node_->get_logger(), "Constructor initialized...");
+  }
+
+  void SetUp() override {
+    RCLCPP_INFO_STREAM(node_->get_logger(), "Setup complete...");
+  }
+
+  void TearDown() override {
+    bool retVal {StopROSExec()};
+    ASSERT_TRUE(retVal);
+
+    RCLCPP_INFO_STREAM(node_->get_logger(), "Teardown complete...");
+  }
+
+ protected:
+  rclcpp::Node::SharedPtr node_;
+  std::stringstream cmd_ss, cmdInfo_ss, killCmd_ss;
+
+  bool StartROSExec(const char* pkg_name, const char* node_name,
+                                                        const char* exec_name) {
+    // build command strings
+    cmd_ss << "ros2 run " << pkg_name << " " << exec_name
+                                               << " > /dev/null 2> /dev/null &";
+
+    cmdInfo_ss << "ros2 node info " << "/" << node_name
+                                                 << " > /dev/null 2> /dev/null";
+
+    // pkill uses exec name <= 15 char only
+    char execName[16];  snprintf(execName, sizeof(execName), "%s", exec_name);
+
+    killCmd_ss << "pkill --signal SIGINT " << execName
+                                                 << " > /dev/null 2> /dev/null";
+
+    // First kill the ros2 node, in case it's still running.
+    StopROSExec();
+
+    // Start a ros2 node and wait for it to get ready:
+    int retVal =  system(cmd_ss.str().c_str());
+    if (retVal != 0)
+      return false;
+
+    retVal = -1;
+    while (retVal != 0) {
+      retVal = system(cmdInfo_ss.str().c_str());
+      sleep(1);
+    }
+    return true;
+  }
+
+  bool StopROSExec() {
+    if (killCmd_ss.str().empty())
+      return true;
+
+    int retVal =  system(killCmd_ss.str().c_str());
+    return retVal == 0;
+  }
+};
+
+TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
+  std::cout << "Starting test..." << std::endl;
+  EXPECT_TRUE(true);
+  /*
+   * 3.) check to see if we get data winhin 3 sec
+   */
+  using timer = std::chrono::system_clock;
+  using namespace std::chrono_literals;
+  timer::time_point clock_start;
+  timer::duration elapsed_time;
+  clock_start = timer::now();
+  elapsed_time = timer::now() - clock_start;
+  rclcpp::Rate rate(2.0);       // 2hz checks
+  while (elapsed_time < 3s) {
+      rclcpp::spin_some(node_);
+      rate.sleep();
+      elapsed_time = timer::now() - clock_start;
+  }
+
+}
+
+int main(int argc, char** argv) {
+  rclcpp::init(argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
+  int result = RUN_ALL_TESTS();
+  rclcpp::shutdown();
+  std::cout << "Tests done, shutting down..." << std::endl;
+  return result;
+  }
