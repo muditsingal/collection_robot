@@ -27,6 +27,13 @@ class TaskPlanningFixture : public testing::Test {
   }
 
   void SetUp() override {
+    bool retVal  {
+      StartROSExec("collection_robot", "move_robot", "move_robot")
+      && StartROSExec("collection_robot", "object_detect", "object_detect")
+      && StartROSExec("collection_robot", "plan_path", "plan_path")};
+
+    ASSERT_TRUE(retVal);
+
     RCLCPP_INFO_STREAM(node_->get_logger(), "Setup complete...");
   }
 
@@ -84,6 +91,7 @@ class TaskPlanningFixture : public testing::Test {
 TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
   std::cout << "Starting test..." << std::endl;
   EXPECT_TRUE(true);
+  bool hasData {false};
   /*
    * 3.) check to see if we get data winhin 3 sec
    */
@@ -100,6 +108,7 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
       elapsed_time = timer::now() - clock_start;
   }
 
+  EXPECT_TRUE(hasData);
 }
 
 int main(int argc, char** argv) {
