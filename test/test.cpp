@@ -96,9 +96,13 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
                      rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr;
   using POSE_SUBSCRIBER =
                       rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
+  using POSE_ARRAY_SUBSCRIBER =
+                 rclcpp::Subscription<geometry_msgs::msg::PoseArray>::SharedPtr;
+
   bool hasData {false};
   bool hasTwistData {false};
   bool hasPoseData {false};
+  bool hasPoseArrayData {false};
 
   TWIST_SUBSCRIBER twist_subscription =
       node_->create_subscription<geometry_msgs::msg::Twist>
@@ -118,6 +122,15 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
        hasPoseData = true;
      });  // end of lambda expression
 
+  POSE_ARRAY_SUBSCRIBER pose_array_subscription =
+      node_->create_subscription<geometry_msgs::msg::PoseArray>
+    ("/plan_path/planned_path", 10,
+     // Lambda expression begins
+     [&](const geometry_msgs::msg::PoseArray& msg) {
+       RCLCPP_INFO(node_->get_logger(), "Received pose array message");
+       hasPoseArrayData = true;
+     });  // end of lambda expression
+
   /*
    * 3.) check to see if we get data winhin 3 sec
    */
@@ -134,6 +147,7 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
       elapsed_time = timer::now() - clock_start;
   }
 
+  hasData = hasTwistData && hasPoseData && hasPoseArrayData;
   EXPECT_TRUE(hasData);
 }
 
@@ -144,4 +158,4 @@ int main(int argc, char** argv) {
   rclcpp::shutdown();
   std::cout << "Tests done, shutting down..." << std::endl;
   return result;
-  }
+}
