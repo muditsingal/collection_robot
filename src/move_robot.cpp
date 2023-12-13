@@ -1,5 +1,5 @@
 /**
- * @file MoveRobot.cpp
+ * @file move_robot.cpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief C++ file for exploring the workspace to detect blocks
  * @version 0.1
@@ -9,7 +9,7 @@
  *
  */
 
-#include "MoveRobot.hpp"
+#include "move_robot.hpp"
 
 MoveRobot::MoveRobot() : Node("move_robot") {
 
