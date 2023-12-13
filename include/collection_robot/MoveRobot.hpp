@@ -1,5 +1,5 @@
 /**
- * @file block_detector.hpp
+ * @file MoveRobot.hpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief header file for exploring the workspace to detect blocks
  * @version 0.1

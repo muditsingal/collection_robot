@@ -1,5 +1,5 @@
 /**
- * @file block_detector.hpp
+ * @file ObjectDetect.hpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief Header file for performing and publishing detections of blocks
  * @version 0.1
@@ -17,22 +17,23 @@
 #include <memory>
 #include <string>
 
-#include "geometry_msgs/msg/transform_stamped.hpp"
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include <rclcpp/rclcpp.hpp>
+
+#include <std_msgs/msg/string.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <apriltag_msgs/msg/april_tag_detection.hpp>
 #include <apriltag_msgs/msg/april_tag_detection_array.hpp>
 #include <apriltag.h>
 
 using namespace std::chrono_literals;
 
-class block_detector : public rclcpp::Node {
+class ObjectDetect : public rclcpp::Node {
   public:
-    block_detector();
-    
+    ObjectDetect();
+
 
   private:
 
-}
+};
