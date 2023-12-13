@@ -11,6 +11,6 @@
 
 #include "MoveRobot.hpp"
 
-MoveRobot::MoveRobot() : Node("MoveRobot") {
+MoveRobot::MoveRobot() : Node("move_robot") {
 
 }
