@@ -91,7 +91,20 @@ class TaskPlanningFixture : public testing::Test {
 TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
   std::cout << "Starting test..." << std::endl;
   EXPECT_TRUE(true);
+
+  using TWIST_SUBSCRIBER =
+                     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr;
   bool hasData {false};
+  bool hasTwistData {false};
+
+  TWIST_SUBSCRIBER twist_subscription =
+      node_->create_subscription<geometry_msgs::msg::Twist>
+    ("/cmd/vel", 10,
+     // Lambda expression begins
+     [&](const geometry_msgs::msg::Twist& msg) {
+       RCLCPP_INFO(node_->get_logger(), "Received twist message");
+       hasTwistData = true;
+     });  // end of lambda expression
   /*
    * 3.) check to see if we get data winhin 3 sec
    */
