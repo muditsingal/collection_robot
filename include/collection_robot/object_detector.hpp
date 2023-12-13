@@ -1,5 +1,5 @@
 /**
- * @file ObjectDetect.hpp
+ * @file object_detector.hpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief Header file for performing and publishing detections of blocks
  * @version 0.1

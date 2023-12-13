@@ -1,5 +1,5 @@
 /**
- * @file ObjectDetect.cpp
+ * @file object_detector.cpp
  * @author Mudit Singal (muditsingal@gmail.com)
  * @brief C++ file for performing detections of blocks and publishing detections
  * @version 0.1
@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "ObjectDetect.hpp"
+#include "object_detector.hpp"
 
-ObjectDetect::block_detector() : Node("block_detector") {
+ObjectDetect::ObjectDetect() : Node("object_detector") {
 
 }
