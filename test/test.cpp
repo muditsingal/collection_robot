@@ -94,8 +94,11 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
 
   using TWIST_SUBSCRIBER =
                      rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr;
+  using POSE_SUBSCRIBER =
+                      rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
   bool hasData {false};
   bool hasTwistData {false};
+  bool hasPoseData {false};
 
   TWIST_SUBSCRIBER twist_subscription =
       node_->create_subscription<geometry_msgs::msg::Twist>
@@ -105,6 +108,16 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
        RCLCPP_INFO(node_->get_logger(), "Received twist message");
        hasTwistData = true;
      });  // end of lambda expression
+
+  POSE_SUBSCRIBER pose_subscription =
+      node_->create_subscription<geometry_msgs::msg::Pose>
+    ("/object_detect/nearest_objects", 10,
+     // Lambda expression begins
+     [&](const geometry_msgs::msg::Pose& msg) {
+       RCLCPP_INFO(node_->get_logger(), "Received pose message");
+       hasPoseData = true;
+     });  // end of lambda expression
+
   /*
    * 3.) check to see if we get data winhin 3 sec
    */
