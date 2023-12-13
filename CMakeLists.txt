@@ -50,4 +50,40 @@ if(BUILD_TESTING)
   )
 endif()
 
+add_executable(move_robot src/move_robot.cpp)
+ament_target_dependencies(move_robot ${PACKAGE_DEPENDENCIES})
+target_include_directories(move_robot
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+add_executable(object_detect src/object_detect.cpp)
+ament_target_dependencies(object_detect ${PACKAGE_DEPENDENCIES})
+target_include_directories(object_detect
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+add_executable(plan_path src/plan_path.cpp)
+ament_target_dependencies(plan_path ${PACKAGE_DEPENDENCIES})
+target_include_directories(plan_path
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+install(TARGETS
+  move_robot
+  object_detect
+  plan_path
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()
