@@ -26,22 +26,28 @@ foreach(dependency IN ITEMS ${PACKAGE_DEPENDENCIES})
   find_package(${dependency} REQUIRED)
 endforeach()
 
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-
+# Add gtest here
 if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
+
+  # un-comment the following lines skip linters (TRUE = skip that test)
+  # set(ament_cmake_cppcheck_FOUND TRUE)
   set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
+  # set(ament_cmake_flake8_FOUND TRUE)
+  set(ament_cmake_uncrustify_FOUND TRUE)
+
+  # Run all lint tests in package.xml except those listed above
   ament_lint_auto_find_test_dependencies()
+
+  ament_add_gtest(${PROJECT_NAME}_test test/test.cpp)
+  ament_target_dependencies(${PROJECT_NAME}_test ${PACKAGE_DEPENDENCIES})
+  target_include_directories(${PROJECT_NAME}_test
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<INSTALL_INTERFACE:include>
+  )
 endif()
 
 ament_package()
