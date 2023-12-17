@@ -9,6 +9,7 @@ from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import Node
 from launch.conditions import IfCondition
 
+
 def generate_launch_description():
   return LaunchDescription([
     IncludeLaunchDescription(
@@ -19,11 +20,16 @@ def generate_launch_description():
                     '/turtlebot3_world.launch.py'
             ])
     ),
-    Node(
-        package='collection_robot',
-        executable='collection_robot_node',
-        name='collection_robot_node'
-    ),
+    # IncludeLaunchDescription(
+    #   package="gazebo_ros",
+    #   launch_file="launch/empty_world.launch",
+    #   launch_arguments={"world_name": "$(find collection_robot)/worlds/room1.world"},
+    # ),
+    # Node(
+    #     package='collection_robot',
+    #     executable='collection_robot_node',
+    #     name='collection_robot_node'
+    # ),
     DeclareLaunchArgument(
       'rosbag_record',
       default_value = TextSubstitution(text = "False"),
@@ -36,3 +42,11 @@ def generate_launch_description():
       shell=True
     )
   ])
+
+
+
+
+
+# pkg_gazebo_ros = get_package_share_directory('collection_robot')
+
+# print(pkg_gazebo_ros)

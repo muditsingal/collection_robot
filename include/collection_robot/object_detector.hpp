@@ -30,7 +30,8 @@
 using namespace std::chrono_literals;
 using POSE_PUB = rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr;
 using IMG_SUB = rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr;
-
+using POSE = geometry_msgs::msg::Pose;
+using IMAGE = std_msgs::msg::Image;
 
 class ObjectDetect : public rclcpp::Node {
   public:
@@ -45,7 +46,7 @@ class ObjectDetect : public rclcpp::Node {
 
     POSE_PUB nearest_object_pose;
     IMG_SUB read_frames_;
-    sensor_msgs::msg::Image frames_;
+    IAMGE frames_;
     rclcpp::TimerBase timer_;
 
 };
