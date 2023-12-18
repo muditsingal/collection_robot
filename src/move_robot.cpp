@@ -12,5 +12,14 @@
 #include "move_robot.hpp"
 
 MoveRobot::MoveRobot() : Node("move_robot") {
+  timer_ = this->create_wall_timer(
+      500ms,
+      std::bind(&MoveRobot::timerCallback, this));
 
+  mover_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
+
+  scanner_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+      "topic_name", // TODO: Add topic name here
+      10,
+      std::bind(&scannerCallback, this));
 }
