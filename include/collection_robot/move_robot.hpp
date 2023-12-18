@@ -26,10 +26,6 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 
-using TWIST_PUB = rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr;
-using POSE_SUB_PTR = rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
-using LASER_SUB_PTR = rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr;
-using TIMER_PTR = rclcpp::TimerBase::SharedPtr;
 using namespace std::chrono_literals;
 
 /**
@@ -48,13 +44,11 @@ class MoveRobot : public rclcpp::Node {
 
     bool robotSense(char direction);
 
-    bool moveTo(const geometry_msgs::msgs::Pose target_pose);
+    bool moveTo(const geometry_msgs::msg::Pose target_pose);
 
-    POSE_SUB_PTR objects_;
-    TWIST_PUB mover_;
-    LASER_SUB_PTR scanner_;
-    TIMER_PTR timer_;
+    rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr objects_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr mover_;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scanner_;
+    rclcpp::TimerBase::SharedPtr timer_;
     sensor_msgs::msg::LaserScan scan_;
-
-
 };
