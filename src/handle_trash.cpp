@@ -23,3 +23,11 @@ HandleTrash::HandleTrash() : Node("handle_trash") {
   for(int i = 0; i < blk_cntr; i++)
     block_indices.push_back(i);
 }
+
+int HandleTrash::get_closest_block() {
+  if(block_indices.empty())
+    return -1;
+  int closest_idx = static_cast<int>(block_indices.front());
+  block_indices.pop_front();
+  return closest_idx;
+}
