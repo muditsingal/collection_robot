@@ -28,3 +28,27 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_msgs/msg/laser_scan.hpp>
+
+
+using TWIST_PUB = rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr;
+using POSE_SUB_PTR = rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
+using LASER_SUB_PTR = rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr;
+using TIMER_PTR = rclcpp::TimerBase::SharedPtr;
+using namespace std::chrono_literals;
+
+/**
+ * @brief Class of Move robot that handles tasks related to moving the robot
+ * in the workspace
+ *
+ */
+class HandleTrash : public rclcpp::Node {
+
+  private:
+
+    sensor_msgs::msg::LaserScan scan_;
+    rclcpp::Client<gazebo_msgs::srv::DeleteEntity>::SharedPtr unspawn_client;
+    TIMER_PTR timer_;
+    rclcpp::Node::SharedPtr trash_handler_node;
+    int blk_cntr;
+    std::list<int> block_indices {};
+};
