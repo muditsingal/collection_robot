@@ -85,7 +85,6 @@ void ObjectDetect::image_read_callback(const
         colors[0] = cv::Scalar(255, 0, 0);
         colors[1] = cv::Scalar(0, 255, 0);
         colors[2] = cv::Scalar(0, 0, 255);
-        // Draw the contours around the detected bin
         if (contours.size() > 0) {
             trash_found = true;
             for (size_t idx = 0; idx < contours.size(); idx++) {
@@ -134,4 +133,42 @@ void ObjectDetect::image_read_callback(const
         RCLCPP_ERROR(this->get_logger(),
             "Error converting ImgMsg to cv Image");
     }
+}
+
+// Function to find the blue block
+bool ObjectDetect::find_block() {
+    RCLCPP_INFO(this->get_logger(), "Finding Trash Blocks");
+    rclcpp::spin_some(odom_node);
+
+    initial_angle = current_angle;
+    turn_right = false;
+    turn_left = false;
+    go_forward = false;
+    brake = false;
+    new_xyz = false;
+    trash_found = false;
+
+    // subscribe to image topic from trutlebot3
+    image_transport::ImageTransport it(image_node);
+    image_sub = it.subscribe("camera/image_raw", 1,
+        std::bind(&ObjectDetect::image_read_callback, this, _1));
+
+
+    while (true) {
+
+        // run both odom and image nodes
+        rclcpp::spin_some(odom_node);
+        rclcpp::spin_some(image_node);
+        if (brake) {
+            go_to_block();
+            break;
+        } else if (new_xyz) {
+            go_to_block();
+            return false;
+        } else {
+            go_to_block();
+            rclcpp::sleep_for(500ms);
+        }
+    }
+    return true;
 }
