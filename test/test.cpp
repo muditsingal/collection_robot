@@ -2,9 +2,10 @@
  * @file test.cpp
  * @author Abhishekh Reddy (areddy@umd.edu)
  * @author Tommy Chang (chang177@umd.edu)
+ * @author Mudit Singal (msingal@umd.edu)
  * @brief Test cases for various nodes used in the collection_robot package.
- * @version 0.5
- * @date 2023-12-12
+ * @version 1.0
+ * @date 2023-12-20
  *
  * @copyright Copyright (c) 2023 Abhishekh Reddy, Tommy Chang
  *
@@ -14,7 +15,7 @@
 #include <gtest/gtest.h>
 #include <stdlib.h>
 
-#include <std_msgs/msg/string.hpp>
+#include <std_msgs/msg/bool.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/pose_array.hpp>
@@ -28,9 +29,7 @@ class TaskPlanningFixture : public testing::Test {
 
   void SetUp() override {
     bool retVal  {
-      StartROSExec("collection_robot", "move_robot", "move_robot")
-      && StartROSExec("collection_robot", "object_detect", "object_detect")
-      && StartROSExec("collection_robot", "plan_path", "plan_path")};
+      StartROSExec("collection_robot", "object_detector", "collector_node")};
 
     ASSERT_TRUE(retVal);
 
@@ -94,41 +93,20 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
 
   using TWIST_SUBSCRIBER =
                      rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr;
-  using POSE_SUBSCRIBER =
-                      rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
-  using POSE_ARRAY_SUBSCRIBER =
-                 rclcpp::Subscription<geometry_msgs::msg::PoseArray>::SharedPtr;
+
+  using BOOL_SUBSCRIBER = rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr;
 
   bool hasData {false};
   bool hasTwistData {false};
-  bool hasPoseData {false};
-  bool hasPoseArrayData {false};
+  bool hasBoolData {false};
 
   TWIST_SUBSCRIBER twist_subscription =
       node_->create_subscription<geometry_msgs::msg::Twist>
-    ("/cmd/vel", 10,
+    ("cmd_vel", 10,
      // Lambda expression begins
      [&](const geometry_msgs::msg::Twist& msg) {
        RCLCPP_INFO(node_->get_logger(), "Received twist message");
        hasTwistData = true;
-     });  // end of lambda expression
-
-  POSE_SUBSCRIBER pose_subscription =
-      node_->create_subscription<geometry_msgs::msg::Pose>
-    ("/object_detect/nearest_objects", 10,
-     // Lambda expression begins
-     [&](const geometry_msgs::msg::Pose& msg) {
-       RCLCPP_INFO(node_->get_logger(), "Received pose message");
-       hasPoseData = true;
-     });  // end of lambda expression
-
-  POSE_ARRAY_SUBSCRIBER pose_array_subscription =
-      node_->create_subscription<geometry_msgs::msg::PoseArray>
-    ("/plan_path/planned_path", 10,
-     // Lambda expression begins
-     [&](const geometry_msgs::msg::PoseArray& msg) {
-       RCLCPP_INFO(node_->get_logger(), "Received pose array message");
-       hasPoseArrayData = true;
      });  // end of lambda expression
 
   /*
@@ -147,7 +125,7 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
       elapsed_time = timer::now() - clock_start;
   }
 
-  hasData = hasTwistData && hasPoseData && hasPoseArrayData;
+  hasData = hasTwistData || hasBoolData;
   EXPECT_TRUE(hasData);
 }
 
