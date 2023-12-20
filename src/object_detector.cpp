@@ -172,3 +172,16 @@ bool ObjectDetect::find_block() {
     }
     return true;
 }
+
+// Function to subscribe to odometry data
+void ObjectDetect::odometry_read_callback(const ODOM::SharedPtr odom_msg) {
+    tf2::Quaternion q(
+        odom_msg->pose.pose.orientation.x,
+        odom_msg->pose.pose.orientation.y,
+        odom_msg->pose.pose.orientation.z,
+        odom_msg->pose.pose.orientation.w);
+    tf2::Matrix3x3 mat(q);
+    double roll, pitch, yaw;
+    mat.getRPY(roll, pitch, yaw);
+    current_angle = yaw;
+}
