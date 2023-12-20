@@ -90,3 +90,18 @@ Source the freshly built package
 ```bash
 source install/setup.bash
 ```
+
+## Running the simulation
+
+Set the environment variable to choose the Waffle Pi variant of Turtlebot 3 in
+simulations.
+
+```bash
+export TURTLEBOT3_MODEL=waffle_pi
+```
+
+The simulation can now be launched
+
+```bash
+ros2 launch collection_robot collector_robot.launch.py
+```
