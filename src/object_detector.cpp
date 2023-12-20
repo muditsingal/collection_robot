@@ -32,3 +32,106 @@ ObjectDetect::ObjectDetect() : Node("object_detector") {
     test_img_pub = this->create_publisher<IMAGE>("/contour_img", 10);
     trash_detector_pub = this->create_publisher<BOOL_>("/trash_found", 10);
 }
+
+
+// Function to go to the detected block
+bool ObjectDetect::go_to_block() {
+    auto bot = TWIST();
+    if (turn_right) {
+        bot.angular.z = -0.05;
+        bot.linear.x = 0;
+    } else if (turn_left) {
+        bot.angular.z = 0.05;
+        bot.linear.x = 0;
+    } else if (go_forward) {
+        bot.linear.x = 0.1;
+        bot.angular.z = 0;
+    } else if (brake) {
+        bot.linear.x = 0;
+        bot.angular.z = 0;
+    }
+    pub_velocity_msg->publish(bot);
+    return true;
+}
+
+// Function to subscribe image data from turtlebot
+void ObjectDetect::image_read_callback(const
+            sensor_msgs::msg::Image::ConstSharedPtr& msg) {
+    try {
+
+        cv::Mat hsv, thr, bin;
+        cv::Mat image = cv_bridge::toCvShare(msg, msg->encoding)->image;
+        int H_min = 100, S_min = 80, V_min = 80;
+        int H_max = 132, S_max = 255, V_max = 255;
+        cv::cvtColor(image, hsv, CV_RGB2HSV);
+
+        cv::inRange(hsv,
+            cv::Scalar(H_min, S_min, V_min),
+            cv::Scalar(H_max, S_max, V_max), thr);
+
+        cv::threshold(thr, bin, 100, 255, cv::THRESH_BINARY);
+
+        trash_detector_msg.data = trash_found;
+        trash_detector_pub->publish(trash_detector_msg);
+        trash_found = false;
+
+        std::vector<std::vector<cv::Point> > contours;
+        cv::Mat contourMat = thr.clone();
+        cv::findContours(contourMat, contours, CV_RETR_LIST,
+                    CV_CHAIN_APPROX_NONE);
+        cv::Mat contourImage(image.size(), CV_8UC3,
+                    cv::Scalar(0, 0, 0));
+        cv::Scalar colors[3];
+        colors[0] = cv::Scalar(255, 0, 0);
+        colors[1] = cv::Scalar(0, 255, 0);
+        colors[2] = cv::Scalar(0, 0, 255);
+        // Draw the contours around the detected bin
+        if (contours.size() > 0) {
+            trash_found = true;
+            for (size_t idx = 0; idx < contours.size(); idx++) {
+                cv::drawContours(contourImage, contours,
+                        idx, colors[idx % 3]);
+            }
+
+            cv::Rect bbox;
+            bbox = cv::boundingRect(contours.at(0));
+            int cx = static_cast<int>((bbox.x+bbox.width)/2);
+            int area = static_cast<int>(bbox.area());
+
+            if (cx < 180) {
+                turn_left = true;
+                turn_right = false;
+            } else if (cx > 200) {
+                    turn_right = true;
+                    turn_left = false;
+            } else {
+                if (area > 40000) {
+                    brake = true;
+                    go_forward = false;
+                } else {
+                    go_forward = true;
+                    brake = false;
+                }
+                turn_left = false;
+                turn_right = false;
+            }
+        } else {
+            if (current_angle - initial_angle > 1.57) {
+                new_xyz = true;
+                turn_left = false;
+                turn_right = false;
+                go_forward = false;
+                brake = true;
+            } else {
+                turn_left = true;
+                turn_right = false;
+                go_forward = false;
+                brake = false;
+            }
+        }
+
+    } catch (cv_bridge::Exception & e) {
+        RCLCPP_ERROR(this->get_logger(),
+            "Error converting ImgMsg to cv Image");
+    }
+}
