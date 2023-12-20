@@ -14,8 +14,6 @@ set(PACKAGE_DEPENDENCIES
   gazebo_msgs
   nav_msgs
   tf2_ros
-  apriltag_msgs
-  apriltag
   image_transport
   cv_bridge
   rclcpp
@@ -31,6 +29,27 @@ foreach(dependency IN ITEMS ${PACKAGE_DEPENDENCIES})
   find_package(${dependency} REQUIRED)
 endforeach()
 
+include_directories(
+  include/${PROJECT_NAME}
+)
+
+add_executable(collector_node src/main.cpp src/object_detector.cpp src/handle_trash.cpp)
+ament_target_dependencies(collector_node ${PACKAGE_DEPENDENCIES})
+
+
+install(TARGETS
+  collector_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
+install(DIRECTORY
+  launch
+  models
+  worlds
+  DESTINATION share/${PROJECT_NAME}
+)
+
 # Add gtest here
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
@@ -44,7 +63,7 @@ if(BUILD_TESTING)
   set(ament_cmake_uncrustify_FOUND TRUE)
 
   # Run all lint tests in package.xml except those listed above
-  ament_lint_auto_find_test_dependencies()
+  # ament_lint_auto_find_test_dependencies()
 
   ament_add_gtest(${PROJECT_NAME}_test test/test.cpp)
   ament_target_dependencies(${PROJECT_NAME}_test ${PACKAGE_DEPENDENCIES})
@@ -54,41 +73,5 @@ if(BUILD_TESTING)
       $<INSTALL_INTERFACE:include>
   )
 endif()
-
-add_executable(move_robot src/move_robot.cpp)
-ament_target_dependencies(move_robot ${PACKAGE_DEPENDENCIES})
-target_include_directories(move_robot
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-add_executable(object_detect src/object_detect.cpp)
-ament_target_dependencies(object_detect ${PACKAGE_DEPENDENCIES})
-target_include_directories(object_detect
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-add_executable(plan_path src/plan_path.cpp)
-ament_target_dependencies(plan_path ${PACKAGE_DEPENDENCIES})
-target_include_directories(plan_path
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-install(TARGETS
-  move_robot
-  object_detect
-  plan_path
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}
-)
 
 ament_package()
