@@ -3,6 +3,7 @@
  * @author Abhishekh Reddy (areddy@umd.edu)
  * @author Tommy Chang (chang177@umd.edu)
  * @author Mudit Singal (msingal@umd.edu)
+  * @author Abhimanyu Saxena (asaxena4@umd.edu)
  * @brief Test cases for various nodes used in the collection_robot package.
  * @version 1.0
  * @date 2023-12-20
@@ -109,6 +110,15 @@ TEST_F(TaskPlanningFixture, TrueIsTrueTest) {
        hasTwistData = true;
      });  // end of lambda expression
 
+  BOOL_SUBSCRIBER bool_subscription =
+      node_->create_subscription<std_msgs::msg::Bool>
+    ("trash_found", 10,
+     // Lambda expression begins
+     [&](const std_msgs::msg::Bool& msg) {
+      RCLCPP_INFO(node_->get_logger(), "Received bool message");
+      hasBoolData = true;
+     }); // end of lambda expression
+     
   /*
    * 3.) check to see if we get data winhin 3 sec
    */
