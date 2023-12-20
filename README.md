@@ -44,20 +44,30 @@ The development in project Magpie involves a collector robot that is expected to
 Installing any of these packages manually is not required, they can be installed
 using `rosdep` which will be discussed in a future step.
 
+## Cloning the repository
+
+The root directory of this repository are contents of a ROS2 package. Hence,
+this needs to be cloned to a folder in the `src/` directory of a ROS2 project
+workspace.
+
 ```bash
-collection_robot
-├───docs
-├───include
-│   └───collection_robot
-├───launch
-├───src
-└───UML
-    └───initial
+<Your ROS2 Workspace>/
+├── build/
+├── install/
+├── log/
+└── src/
+    └── beginner_tutorials/ <-- Repository clones to this folder
+        └── <Repository contents>
 ```
 
-### Building Instructions
+<p align="center">Workspace directory tree with this repository contents in it</p>
 
-Clone the repo in src folder of ros2 workspace:
+Clone the repository in the `src/` directory of your ROS2 workspace
+
+```bash
+git clone https://github.com/muditsingal/collection_robot.git collection_robot
+```
+```
 
 ```bash
 git clone https://github.com/muditsingal/collection_robot.git -b dev
