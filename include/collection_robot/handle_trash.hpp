@@ -42,6 +42,12 @@ using namespace std::chrono_literals;
  *
  */
 class HandleTrash : public rclcpp::Node {
+  public:
+    HandleTrash();
+
+    bool remove_trash();
+
+    int get_closest_block();
 
   private:
 
