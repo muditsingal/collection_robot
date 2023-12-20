@@ -52,6 +52,14 @@ def generate_launch_description():
             'yaw':    yaw
         }.items()
     )
+    trash_ld = IncludeLaunchDescription(PythonLaunchDescriptionSource([
+              trash_launch_dir,
+              '/spawn_trash.launch.py']))
+    collector_node = Node(
+        package='collection_robot',
+        executable='collector_node',
+        name='collector_node'
+    )
 
     ld = LaunchDescription()
 
@@ -60,5 +68,7 @@ def generate_launch_description():
     ld.add_action(gzclient_cmd)
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
+    ld.add_action(trash_ld)
+    ld.add_action(collector_node)
 
     return ld
