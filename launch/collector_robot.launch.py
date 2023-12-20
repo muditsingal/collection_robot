@@ -3,50 +3,72 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, ExecuteProcess
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch.conditions import IfCondition
 
 
 def generate_launch_description():
-  return LaunchDescription([
-    IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                os.path.join(get_package_share_directory(
-                    'turtlebot3_gazebo'),
-                    'launch'),
-                    '/turtlebot3_world.launch.py'
-            ])
-    ),
-    # IncludeLaunchDescription(
-    #   package="gazebo_ros",
-    #   launch_file="launch/empty_world.launch",
-    #   launch_arguments={"world_name": "$(find collection_robot)/worlds/room1.world"},
-    # ),
-    # Node(
-    #     package='collection_robot',
-    #     executable='collection_robot_node',
-    #     name='collection_robot_node'
-    # ),
-    DeclareLaunchArgument(
-      'rosbag_record',
-      default_value = TextSubstitution(text = "False"),
-      choices = ['True', 'False'],
-      description = "Argument to enable/disable recording of all ros2 topics"
-    ),
-    ExecuteProcess(
-      condition=IfCondition(LaunchConfiguration('rosbag_record')),
-      cmd=['ros2', 'bag', 'record', '-a', '-x /camera.+'],
-      shell=True
+    launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
+    tbot3_launch_dir = os.path.join(get_package_share_directory('collection_robot'), 'launch')
+    trash_launch_dir = os.path.join(get_package_share_directory('collection_robot'), 'launch')
+    pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
+
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    x_pose = LaunchConfiguration('x_pose', default='2.5')
+    y_pose = LaunchConfiguration('y_pose', default='0.0')
+    yaw = LaunchConfiguration('yaw', default='-3.14159')
+
+    collection_world = os.path.join(get_package_share_directory('collection_robot'),
+                                              'worlds', 'room2.world')
+
+    gzserver_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_gazebo_ros, 'launch', 'gzserver.launch.py')
+        ),
+        launch_arguments={'world': collection_world}.items()
     )
-  ])
 
+    gzclient_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_gazebo_ros, 'launch', 'gzclient.launch.py')
+        )
+    )
 
+    robot_state_publisher_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(launch_file_dir, 'robot_state_publisher.launch.py')
+        ),
+        launch_arguments={'use_sim_time': use_sim_time}.items()
+    )
 
+    spawn_turtlebot_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(tbot3_launch_dir, 'spawn_tbot3_custom.py')),
+        launch_arguments={
+            'x_pose': x_pose,
+            'y_pose': y_pose,
+            'yaw':    yaw
+        }.items()
+    )
+    trash_ld = IncludeLaunchDescription(PythonLaunchDescriptionSource([
+              trash_launch_dir,
+              '/spawn_trash.launch.py']))
+    collector_node = Node(
+        package='collection_robot',
+        executable='collector_node',
+        name='collector_node'
+    )
 
+    ld = LaunchDescription()
 
-# pkg_gazebo_ros = get_package_share_directory('collection_robot')
+    # Add the commands to the launch description
+    ld.add_action(gzserver_cmd)
+    ld.add_action(gzclient_cmd)
+    ld.add_action(robot_state_publisher_cmd)
+    ld.add_action(spawn_turtlebot_cmd)
+    ld.add_action(trash_ld)
+    ld.add_action(collector_node)
 
-# print(pkg_gazebo_ros)
+    return ld
