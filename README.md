@@ -67,25 +67,26 @@ Clone the repository in the `src/` directory of your ROS2 workspace
 ```bash
 git clone https://github.com/muditsingal/collection_robot.git collection_robot
 ```
+
+>**Before building the packages:** For the first time, ensure that the package
+> dependencies are installed. Run these commands from the **root workspace directory**.
+
+```bash
+rosdep init && rosdep update
 ```
 
 ```bash
-git clone https://github.com/muditsingal/collection_robot.git -b dev
+rosdep install --from-paths src -y --ignore-src
 ```
 
-Build the ros2 package:
+Build the package in the **root directory** of your ROS2 workspace.
 
 ```bash
 colcon build --packages-select collection_robot
 ```
 
+Source the freshly built package
 
-
-
-### Sprint planning Sheet:
-
-[ENPM808X Final Project Sprint Planning Sheet](https://docs.google.com/spreadsheets/d/1aB_AL3CoJv4jf_V5iHIeneE0IcUH5RtSz64aUaEVvbM/edit?usp=sharing)
-
-[ENPM808X Final Project Sprint Review Notes](https://docs.google.com/document/d/11TBs6DGolvmfTOMxNTo-zaF9SJSSREofYDMhL7Y_Msg/edit?usp=sharing)
-
-
+```bash
+source install/setup.bash
+```
