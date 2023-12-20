@@ -11,7 +11,8 @@ set(PACKAGE_DEPENDENCIES
   std_msgs
   sensor_msgs
   geometry_msgs
-  apriltag_ros
+  gazebo_msgs
+  nav_msgs
   tf2_ros
   apriltag_msgs
   apriltag
@@ -19,6 +20,10 @@ set(PACKAGE_DEPENDENCIES
   cv_bridge
   rclcpp
   rclpy
+  tf2
+  OpenCV
+  gazebo_msgs
+  rosidl_default_generators
 )
 
 # find dependencies
