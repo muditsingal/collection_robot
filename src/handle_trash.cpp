@@ -24,6 +24,34 @@ HandleTrash::HandleTrash() : Node("handle_trash") {
     block_indices.push_back(i);
 }
 
+bool HandleTrash::remove_trash() {
+    while (!unspawn_client->wait_for_service(2s)) {
+        if (!rclcpp::ok()) {
+          RCLCPP_ERROR(this->get_logger(),
+                                    "Interruped service call");
+          return false;
+        }
+        RCLCPP_INFO(this->get_logger(), "Service currently not available... ");
+    }
+
+    auto request = std::make_shared<gazebo_msgs::srv::DeleteEntity::Request>();
+    int closest_blk = get_closest_block();
+    if (closest_blk == -1) {
+      RCLCPP_ERROR(this->get_logger(), "No blocks left to delete!");
+      return false;
+    }
+    request->name = "trash_block" + std::to_string(closest_blk);
+
+    auto srv_response = unspawn_client->async_send_request(request);
+    auto ret = rclcpp::spin_until_future_complete(trash_handler_node,
+                                            srv_response, 15s);
+    if (ret == rclcpp::FutureReturnCode::SUCCESS) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 int HandleTrash::get_closest_block() {
   if(block_indices.empty())
     return -1;
