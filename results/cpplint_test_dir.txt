@@ -1,0 +1,8 @@
+Checking test.cpp ...
+test.cpp:44:0: style: The function 'SetUp' is never used. [unusedFunction]
+
+^
+test.cpp:53:0: style: The function 'TearDown' is never used. [unusedFunction]
+
+^
+Done processing test.cpp
