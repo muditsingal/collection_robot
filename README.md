@@ -20,6 +20,8 @@ The development in project Magpie involves a collector robot that is expected to
 
 [Sprint Plan and Review Notes](https://docs.google.com/document/d/11TBs6DGolvmfTOMxNTo-zaF9SJSSREofYDMhL7Y_Msg/edit?usp=sharing)
 
+[Presentation Slides](https://docs.google.com/presentation/d/1b2oMn3Hc0g42KvzBw8cZNTj4SnEQ_BIDaH0CTApHyCE/edit?usp=sharing)
+
 ## Environment and dependencies
 
 - Ubuntu Jammy (22.04)
