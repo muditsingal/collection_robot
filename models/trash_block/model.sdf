@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="trash_block">
+    <pose>0 0 0.1 0 0 0</pose>
+    <link name="link">
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.166666666667</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.166666666667</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.166666666667</izz>
+        </inertia>
+        <pose>0 0 0.1 0 0 0</pose>
+      </inertial>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.2 0.2 0.2</size> <!-- Dimensions in meters (20 cm = 0.2 m) -->
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.2 0.2 0.2</size> <!-- Dimensions in meters -->
+          </box>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
