@@ -16,11 +16,13 @@ using namespace std::chrono_literals;
 using std::placeholders::_1;
 
 HandleTrash::HandleTrash() : Node("handle_trash") {
-  unspawn_client = create_client<gazebo_msgs::srv::DeleteEntity>("delete_entity");
+  unspawn_client =
+      create_client<gazebo_msgs::srv::DeleteEntity>("delete_entity");
+
   trash_handler_node = rclcpp::Node::make_shared("handle_trash");
-  block_indices={};
+  block_indices = {};
   blk_cntr = 3;
-  for(int i = 0; i < blk_cntr; i++)
+  for (int i = 0; i < blk_cntr; i++)
     block_indices.push_back(i);
 }
 
@@ -53,7 +55,7 @@ bool HandleTrash::remove_trash() {
 }
 
 int HandleTrash::get_closest_block() {
-  if(block_indices.empty())
+  if (block_indices.empty())
     return -1;
   int closest_idx = static_cast<int>(block_indices.front());
   block_indices.pop_front();

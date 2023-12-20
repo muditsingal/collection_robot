@@ -20,7 +20,6 @@
 using std::placeholders::_1;
 
 ObjectDetect::ObjectDetect() : Node("object_detector") {
-
     // Init the pub,sub and image processing pipeline
     image_node = rclcpp::Node::make_shared("image_listener", node_options);
     pub_velocity_msg = this->create_publisher<TWIST>("cmd_vel", 10);
@@ -58,7 +57,6 @@ bool ObjectDetect::go_to_block() {
 void ObjectDetect::image_read_callback(const
             sensor_msgs::msg::Image::ConstSharedPtr& msg) {
     try {
-
         cv::Mat hsv, thr, bin;
         cv::Mat image = cv_bridge::toCvShare(msg, msg->encoding)->image;
         int H_min = 100, S_min = 80, V_min = 80;
@@ -128,7 +126,6 @@ void ObjectDetect::image_read_callback(const
                 brake = false;
             }
         }
-
     } catch (cv_bridge::Exception & e) {
         RCLCPP_ERROR(this->get_logger(),
             "Error converting ImgMsg to cv Image");
@@ -155,7 +152,6 @@ bool ObjectDetect::find_block() {
 
 
     while (true) {
-
         // run both odom and image nodes
         rclcpp::spin_some(odom_node);
         rclcpp::spin_some(image_node);

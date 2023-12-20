@@ -10,7 +10,6 @@
  */
 
 #pragma once
-#include "rclcpp/rclcpp.hpp"
 
 #include <chrono>
 #include <fstream>
@@ -30,9 +29,9 @@
 #include <sensor_msgs/msg/laser_scan.hpp>
 
 using TWIST_PUB = rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr;
-using POSE_SUB_PTR = rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
-using LASER_SUB_PTR = rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr;
-using TIMER_PTR = rclcpp::TimerBase::SharedPtr;
+using POSE_SUB = rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr;
+using LASER_SUB = rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr;
+using TIMER = rclcpp::TimerBase::SharedPtr;
 using namespace std::chrono_literals;
 
 /**
@@ -41,19 +40,18 @@ using namespace std::chrono_literals;
  *
  */
 class HandleTrash : public rclcpp::Node {
-  public:
-    HandleTrash();
+ public:
+  HandleTrash();
 
-    bool remove_trash();
+  bool remove_trash();
 
-    int get_closest_block();
+  int get_closest_block();
 
-  private:
-
-    sensor_msgs::msg::LaserScan scan_;
-    rclcpp::Client<gazebo_msgs::srv::DeleteEntity>::SharedPtr unspawn_client;
-    TIMER_PTR timer_;
-    rclcpp::Node::SharedPtr trash_handler_node;
-    int blk_cntr;
-    std::list<int> block_indices {};
+ private:
+  sensor_msgs::msg::LaserScan scan_;
+  rclcpp::Client<gazebo_msgs::srv::DeleteEntity>::SharedPtr unspawn_client;
+  TIMER timer_;
+  rclcpp::Node::SharedPtr trash_handler_node;
+  int blk_cntr;
+  std::list<int> block_indices {};
 };

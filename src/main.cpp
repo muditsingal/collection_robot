@@ -14,7 +14,6 @@
 #include "handle_trash.hpp"
 
 int main(int argc, char * argv[]) {
-
     rclcpp::init(argc, argv);
 
     HandleTrash trash_obj;
