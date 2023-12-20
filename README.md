@@ -105,3 +105,10 @@ The simulation can now be launched
 ```bash
 ros2 launch collection_robot collector_robot.launch.py
 ```
+
+## Known issues
+
+Even though GitHub CI and CodeCov are working in the backend, the badges are not working.
+
+- CodeCov is not generating a report due to which the badge is not working
+- GitHub CI badge is not working too
