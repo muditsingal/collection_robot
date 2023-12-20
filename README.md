@@ -1,8 +1,14 @@
 # Project-Magpie
 
-ENPM808X final project repo
+ENPM808X - Mudit Singal, Abhishekh Reddy and Abhimanyu Saxena
 
-[![codecov](https://codecov.io/gh/muditsingal/collection_robot/branch/dev/graph/badge.svg)](https://codecov.io/gh/muditsingal/collection_robot)
+## Project Status
+
+![CICD Workflow status](https://github.com/muditsingal/collection_robot/workflows/run-unit-test-and-upload-codecov.yml/badge.svg)
+
+[![codecov](https://codecov.io/gh/muditsingal/collection_robot/branch/dev2/graph/badge.svg)](https://codecov.io/gh/muditsingal/collection_robot)
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Overview
 
