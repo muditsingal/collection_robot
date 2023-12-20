@@ -20,6 +20,30 @@ The development in project Magpie involves a collector robot that is expected to
 
 [Sprint Plan and Review Notes](https://docs.google.com/document/d/11TBs6DGolvmfTOMxNTo-zaF9SJSSREofYDMhL7Y_Msg/edit?usp=sharing)
 
+## Environment and dependencies
+
+- Ubuntu Jammy (22.04)
+- ROS2 Humble Hawksbill (Even base installation is sufficient)
+- Git
+
+### Package dependencies
+
+- `std_msgs` - Standard Messages Library
+- `sensor_msgs` - Sensor Messages Library
+- `geometry_msgs` - Geometry Messages Library
+- `gazebo_ros_pkgs` - Gazebo simulator + ROS2 plugins with Gazebo
+- `nav_msgs` - Navigation Messages Library
+- `tf2_ros` - Package API for working with reference frames and transformations
+- `image_transport` - Package used as a medium of publishing/subscribing images to topics
+- `cv_bridge` - Translation layer between ROS2 messages and OpenCV library datatypes
+- `opencv` - OpenCV package for Computer Vision
+- `rclcpp` - ROS2 C++ Client Library
+- `rclpy` - ROS2 Python Client Library
+- `turtlebot3` - Turtlebot3 ROS2 Packages for simulations
+
+Installing any of these packages manually is not required, they can be installed
+using `rosdep` which will be discussed in a future step.
+
 ```bash
 collection_robot
 ├───docs
